@@ -13,7 +13,7 @@
 		├── qq_api.php      --- 腾讯微博开放接口
 		└── sina_api.php    --- 新浪微博开放接口    	
     ├── config.yaml         --- SAE服务配置
-    └── sync.php           	--- 微博云同步执行文件
+    └── sync.php			--- 微博云同步执行文件
 
 
 ### 二、功能
