@@ -1,0 +1,9 @@
+---
+name: yuntongbu
+version: 1
+accesskey: abc
+cron:
+    - description: sync weibo by YunTongBu
+	  url: sync.php
+	  schedule: every 1 mins
+	  timezone: Beijing
