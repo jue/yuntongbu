@@ -28,37 +28,54 @@
         </ul>
       </header>
       <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <h2>
+<a name="%E5%BE%AE%E5%8D%9A%E4%BA%91%E5%90%8C%E6%AD%A5" class="anchor" href="#%E5%BE%AE%E5%8D%9A%E4%BA%91%E5%90%8C%E6%AD%A5"><span class="octicon octicon-link"></span></a>微博云同步</h2>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>一款基于新浪SAE的微博同步工具，支持新浪微博、腾讯微博原创微博同步</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<p>预览：<a href="http://weibo.com/nipao">新浪微博</a>
+      <a href="http://t.qq.com/xiangjianfeng">腾讯微博</a></p>
+
+<h3>
+<a name="%E4%B8%80%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84" class="anchor" href="#%E4%B8%80%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="octicon octicon-link"></span></a>一、目录结构</h3>
+
+<pre><code>.
+├── README.md           --- 使用帮助
+├── lib              
+    ├── oauth.php       --- oauth协议文件     
+    ├── qq_api.php      --- 腾讯微博开放接口
+    └── sina_api.php    --- 新浪微博开放接口      
+├── config.yaml         --- SAE服务配置
+└── sync.php          --- 微博云同步执行文件
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
 <h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a name="%E4%BA%8C%E5%8A%9F%E8%83%BD" class="anchor" href="#%E4%BA%8C%E5%8A%9F%E8%83%BD"><span class="octicon octicon-link"></span></a>二、功能</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<ol>
+<li>将腾讯微博与新浪微博双向同步</li>
+<li>仅将腾讯微博同步新浪微博</li>
+<li>仅将新浪微博同步腾讯微博</li>
+<li>发微博时，只要在微博信息前加 - (中划线或减号)，这样该微博信息将不会被自动同步到另一微博。</li>
+</ol><h3>
+<a name="%E4%B8%89%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C" class="anchor" href="#%E4%B8%89%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="octicon octicon-link"></span></a>三、准备工作</h3>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<ul>
+<li>申请Sina App Engine(简称SAE) <a href="http://sae.sina.com.cn/?m=front">http://sae.sina.com.cn/?m=front</a>
+&gt;&gt; 登录成功后开启 服务管理中的 Memcache 、Cron 、 FetchURL
+*申请 新浪微博开放平台应用 <a href="http://open.weibo.com/development">http://open.weibo.com/development</a>
+&gt;&gt; 成功后您将获得新浪微博的 App Key 、 App Secret
+*申请 腾讯微博开放平台应用 <a href="http://dev.open.t.qq.com/developer/">http://dev.open.t.qq.com/developer/</a>
+&gt;&gt; 成功后您将获得腾讯微博的 App Key 、 App Secret</li>
+</ul><h3>
+<a name="%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E" class="anchor" href="#%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E"><span class="octicon octicon-link"></span></a>安装说明</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<ol>
+<li>下载 源文件 并解压 或者 GIT 到本地</li>
+<li>打开config.yaml文件修改‘accesskey’值 （SAE 应用信息-&gt;汇总信息 里查看）</li>
+<li>打开config.php文件修改新浪微博app key、腾讯微博app key 及其它信息</li>
+<li>将修改后的文件一起上传到SAE平台即可 (上传地址： 应用管理-&gt;代码管理-&gt;上传代码包)</li>
+</ol>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/nipao">nipao</a></p>
