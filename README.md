@@ -23,12 +23,12 @@
 4. 发微博时，只要在微博信息前加 - (中划线或减号)，这样该微博信息将不会被自动同步到另一微博。
 
 ### 三、准备工作
-* 申请Sina App Engine(简称SAE) http://sae.sina.com.cn/?m=front
-	> 登录成功后开启 服务管理中的 Memcache 、Cron 、 FetchURL
-* 申请 新浪微博开放平台应用 http://open.weibo.com/development
-	> 成功后您将获得新浪微博的 App Key 、 App Secret
-* 申请 腾讯微博开放平台应用 http://dev.open.t.qq.com/developer/
-	> 成功后您将获得腾讯微博的 App Key 、 App Secret
+* 申请Sina App Engine(简称SAE) http://sae.sina.com.cn/?m=front  
+	> 登录成功后开启 服务管理中的 Memcache 、Cron 、 FetchURL  
+* 申请 新浪微博开放平台应用 http://open.weibo.com/development  
+	> 成功后您将获得新浪微博的 App Key 、 App Secret  
+* 申请 腾讯微博开放平台应用 http://dev.open.t.qq.com/developer/  
+	> 成功后您将获得腾讯微博的 App Key 、 App Secret   
 
 ###安装说明
 1. 下载 源文件 并解压 或者 GIT 到本地
