@@ -1,95 +1,54 @@
 <?php 
 	@header('Content-Type:text/html;charset=utf-8'); 
 	
-	include_once( 'config.php' );
-	
-	include_once( 'lib/oauth.php' );
-	include_once( 'lib/sina_api.php' );
-	include_once( 'lib/qq_api.php' );
+	include_once( './config.php' );	
+	include( './lib/oauth.php' );
+	include( './lib/api.php' );
 
-	$sina_c = new WeiboClient( SINA_AKEY , SINA_SKEY , SINA_TOKEN , SINA_SECRET  );
-	$qq_c = new MBApiClient(QQ_AKEY,QQ_SKEY,QQ_TOKEN,QQ_SECRET);	
-		
-	$mmc=memcache_init();
-	
-	/* if(!isset(memcache_get($mmc,"sina_last_update"))){
-		memcache_set($mmc,"sina_last_update","0");
+	$sina = new weiboClient( WB_AKEY , WB_SKEY ,'','', SINA_TOKEN );
+	$qq = new weiboClient( QQ_AKEY , QQ_SKEY ,'','', QQ_TOKEN );
+
+	$sinaTweet = $sina->readFirstTweet(SINA_USERNAME,SINA_TOKEN,'sina');
+	if(!empty($sinaTweet['error'])){
+		exit;
 	}
-	
-	if(!isset(memcache_get($mmc,"qq_last_update"))){
-		memcache_set($mmc,"qq_last_update","0");
-	} */
-	
-	$sina_last_update = memcache_get($mmc,"sina_last_update");
-	$qq_last_update = memcache_get($mmc,"qq_last_update");	
+	$qqTweet = $qq->readFirstTweet(QQ_USERNAME,QQ_TOKEN,'qq',QQ_OPENID);
+	echo "<pre>";
+
+	print_r($sinaTweet);
+	$kv = new SaeKV();
+	$ret = $kv->init();
+
+	$sinaLastUpdate = $kv->get('sinaLastUpdate');
+
+	if(empty($sinaLastUpdate)){
+		$sinaLastUpdate = $kv->set('sinaLastUpdate', '100');
+	}
+
+	$qqLastUpdate = $kv->get('qqLastUpdate');
+
+	if(empty($qqLastUpdate)){
+		$qqLastUpdate = $kv->set('qqLastUpdate', '100');
+	}
+
+	//同步新浪微博到腾讯微博
+	if(TOQQ == 0){
+		$isSync = $sina -> isSync(strip_tags($sinaTweet['statuses'][0]['source']),SINA_TITLE,strtotime($sinaTweet['statuses'][0]['created_at']),$sinaLastUpdate,$sinaTweet['statuses'][0]['retweeted_status'],$sinaTweet['statuses'][0]['text']);
+		if($isSync){
+			$postToQq = $qq -> postTweet(QQ_TOKEN,$sinaTweet['statuses'][0]['text'],$sinaTweet['statuses'][0]['original_pic'],$sinaTweet['statuses'][0]['geo']['coordinates'][0],$sinaTweet['statuses'][0]['geo']['coordinates'][1],'qq',QQ_OPENID);
+			$kv->replace('sinaLastUpdate', strtotime($sinaTweet['statuses'][0]['created_at']));
+		}
+	}
 
 
 	//同步腾讯微博到新浪微博
 	if(TOSINA == 0){
-		try{
-			$qq_tweets = $qq_c->getMyTweet();
-		}catch(Exception $e){
-			exit;
-		}
-		$isQqTrue = true;
-			
-		switch($isQqTrue){						
-			case $qq_tweets['data']['info'][0]['timestamp'] <= $qq_last_update :
-				$isQqTrue = false;
-				break;
-				
-			case !empty($qq_tweets['data']['info'][0]['source']) :
-				$isQqTrue = false;
-				break;
-
-			case preg_match('/^-/', trim($qq_tweets['data']['info'][0]['origtext'])) : // 以 "-" 开关的微博不同步
-				$isQqTrue = false;
-				break;					
-		}
-			
-		if($isQqTrue){
-			if(!empty($qq_tweets['data']['info'][0]['image'][0])){
-				$imgurl = $qq_tweets['data']['info'][0]['image'][0].'/2000';
-			}
-			$ret = $sina_c ->postTosina('- '.$qq_tweets['data']['info'][0]['origtext'],$imgurl);	
-			if(!empty($ret['user'])){
-				memcache_set($mmc,"qq_last_update",$qq_tweets['data']['info'][0]['timestamp']);
-			}
+		$isSync = $qq -> isSync($qqTweet['data']['info'][0]['from'],QQ_TITLE,$qqTweet['data']['info'][0]['timestamp'],$qqLastUpdate,$qqTweet['data']['info'][0]['source'],$qqTweet['data']['info'][0]['origtext']);
+		if($isSync){
+          	$postToSina = $sina -> postTweet(SINA_TOKEN,$qqTweet['data']['info'][0]['origtext'],$qqTweet['data']['info'][0]['image'][0],$qqTweet['data']['info'][0]['latitude'],$qqTweet['data']['info'][0]['longitude'],'sina','');
+			$kv->replace('qqLastUpdate', $qqTweet['data']['info'][0]['timestamp']);
 		}
 	}
 	
-	//同步新浪微博到腾讯微博
-	if(TOQQ == 0){		
-		$sina_tweets = $sina_c->user_timeline(1,1);	
-		if(!empty($sina_tweets['error_code'])){
-			exit;
-		}else{		
-			$isSinaTrue = true;		
-			switch($isSinaTrue){			
-				case strtotime($sina_tweets[0]['created_at']) <= $sina_last_update :  
-					$isSinaTrue = false;
-					break;
-					
-				case !empty($sina_tweets[0]['retweeted_status']) :  //判断是否转发、评论、对话
-					$isSinaTrue = false;
-					break;
-
-				case preg_match('/^-/', trim($sina_tweets[0]['text'])) : // 以 "-" 开关的微博不同步
-					$isSinaTrue = false;
-					break;
-			}
-			if($isSinaTrue){
-				//同步操作
-				try{
-					$ret = $qq_c->postOne('- '.$sina_tweets[0]['text'],$sina_tweets[0]['original_pic'],$sina_tweets[0]['geo']['coordinates'][1],$sina_tweets[0]['geo']['coordinates'][0]);
-					if($ret['ret'] == 0){
-						memcache_set($mmc,"sina_last_update",strtotime($sina_tweets[0]['created_at']));
-					}
-							
-				}catch(Exception $e){
-					
-				}																						
-			}
-		}	
-	}	
+		
 ?>

@@ -1,9 +1,9 @@
 ---
 name: yuntongbu
 version: 1
-accesskey: abc
+accesskey: 3nm23l2ojn
 cron:
-    - description: sync weibo by YunTongBu
+	- description: sync xiangjianfeng's weibo
 	  url: sync.php
 	  schedule: every 1 mins
 	  timezone: Beijing
