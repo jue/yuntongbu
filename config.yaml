@@ -1,9 +1,9 @@
 ---
-name: yuntongbu
+name: #sae应用名
 version: 1
-accesskey: 3nm23l2ojn
+accesskey: #在SAE中查找
 cron:
-	- description: sync xiangjianfeng's weibo
+	- description: yuntongbu
 	  url: sync.php
 	  schedule: every 1 mins
 	  timezone: Beijing

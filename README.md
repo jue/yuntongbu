@@ -9,10 +9,10 @@
     .
     ├── README.md           --- 使用帮助
     ├── lib              
-		├── oauth.php       --- oauth协议文件    	
-		├── qq_api.php      --- 腾讯微博开放接口
-		└── sina_api.php    --- 新浪微博开放接口    	
+		├── oauth.php       --- oauth协议文件   
+		└── api.php    		--- 微博开放接口    	
     ├── config.yaml         --- SAE服务配置
+    ├── config.php         	--- 同步帐号配置文件
     └── sync.php            --- 微博云同步执行文件
 
 
